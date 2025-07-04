@@ -20,6 +20,9 @@ public class moveSample : MonoBehaviour
     private double X_data_now = 200;
     private double X_data_befo = 200;
 
+    [SerializeField, Tooltip("進む倍率")]
+    [Header("進む倍率")]
+    private double move_ratio = 1.0;
 
 
     // 追加兼岩
@@ -96,14 +99,6 @@ public class moveSample : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (M5.getAngX() <= 180 || this.X_data_now != M5.getAngX())
-        //{
-        //    move();
-        //}
-
-
-
-
         // デバッグのため、ひとまずコメントアウト
         if (!jump_flag)
         {
@@ -138,8 +133,6 @@ public class moveSample : MonoBehaviour
         X_data_befo = X_data_now;
 
         for (int i = streat_list.Length - 1; i > 0; i--) streat_list[i] = streat_list[i - 1];
-
-
 
         // M5Stickから値の取得
         X_data_now = M5.getAngX();
@@ -219,8 +212,9 @@ public class moveSample : MonoBehaviour
             else if (streat_before == 1 && (streat_new == 0 || streat_new == -1))
             {
                 flont_stop_position = X_list[0];
-                streat_distance = flont_stop_position - flont_start_position;
-                Debug.Log("前に進んだ距離: " + streat_distance + "度");
+                streat_distance = flont_stop_position - flont_start_position;   // 実際に進んだ距離
+                streat_distance *= move_ratio;      // 進む倍率を掛ける
+                Debug.Log("前に進んだ距離: " + streat_distance + "度 (倍率：" + move_ratio + ")");
             }
 
         }

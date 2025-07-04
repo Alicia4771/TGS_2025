@@ -21,7 +21,7 @@ public class keyCommand : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))  // 数字の3が押されたとき
         {
-            // 倍率を1.5に設定
+            // 倍率を2.0に設定
             moveSampleScript.SetMoveRatio(2.0);
         }
     }

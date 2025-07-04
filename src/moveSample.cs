@@ -170,7 +170,7 @@ public class moveSample : MonoBehaviour
 
                 // 実際に進む処理
                 //rb.linearVelocity = Vector3.forward * moveSpeed;
-                transform.position += Vector3.forward * moveSpeed * Time.deltaTime;
+                transform.position += Vector3.forward * moveSpeed * Time.deltaTime * (float)move_ratio;
 
 
                 animator.Play("アーマチュア|nobiru");

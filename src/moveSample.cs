@@ -261,4 +261,9 @@ public class moveSample : MonoBehaviour
     {
         this.jump_flag = jump_flag;
     }
+
+    public void SetMoveRatio(double move_ratio)
+    {
+        this.move_ratio = move_ratio;
+    }   
 }

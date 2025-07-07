@@ -18,9 +18,18 @@ public class jumpSample : MonoBehaviour
 
     void Start()
     {
-        // 初期化処理
         isJumping = false;
+
+        if (moveSample == null)
+        {
+            moveSample = FindObjectOfType<moveSample>();
+            if (moveSample == null)
+            {
+                Debug.LogError("moveSample がシーン内に存在しません。正しくセットしてください。");
+            }
+        }
     }
+
 
 
 

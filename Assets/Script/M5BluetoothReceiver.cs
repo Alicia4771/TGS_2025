@@ -199,16 +199,4 @@ public class M5BluetoothReceiver : MonoBehaviour
     public double getAccMagnitude() {
         return this.accMagnitude;
     }
-
-    // セッターメソッド
-    public void setAngX(double angX) {
-        this.angX = angX;
-    }
-
-    public void setAccMagnitude(double accMagnitude) {
-        this.accMagnitude = accMagnitude;
-    }
-
-
-
 }

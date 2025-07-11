@@ -100,9 +100,10 @@ public class moveSample : MonoBehaviour
 {
     [SerializeField, Tooltip("M5StickのBluetooth受信クラス")]
     [Header("M5StickのBluetooth受信クラス")]
-
-
     private M5BluetoothReceiver M5;
+
+    [SerializeField]
+    private ShareMoveRatioData shareMoveRatioData;
 
     [SerializeField, Tooltip("ジャンプのクラス")]
     [Header("ジャンプのクラス")]
@@ -189,6 +190,8 @@ public class moveSample : MonoBehaviour
         for (int i = 0; i < streat_list.Length; i++) streat_list[i] = 0;
 
         jump_flag = false;
+
+        move_ratio = shareMoveRatioData.GetMoveRatio();
     }
 
     // Update is called once per frame

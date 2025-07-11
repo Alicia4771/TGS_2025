@@ -10,11 +10,6 @@ public class keyCommand : MonoBehaviour
     [SerializeField]
     private ShareMoveRatioData shareMoveRatioData;
 
-    private void Start()
-    {
-        
-    }
-
     void Update()
     {
     

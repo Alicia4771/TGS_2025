@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class ShareMoveRatioData : MonoBehaviour
 {
-    private double moveRatio;
+    private static double moveRatio;
 
 
     public double GetMoveRatio()
     {
-        return this.moveRatio;
+        return moveRatio;
     }
 
-    public void SetMoveRatio(double moveRatio)
+    public void SetMoveRatio(double value)
     {
-        this.moveRatio = moveRatio;
+        moveRatio = value;
     }
 }

@@ -1,98 +1,3 @@
-//using System;
-//using UnityEngine;
-
-//public class moveSample : MonoBehaviour
-//{
-//    M5BluetoothReceiver M5 = new M5BluetoothReceiver();
-
-//    private double X_now = 200;
-//    private double X_befo1 = 200;
-//    private double X_befo2 = 200;
-//    private double X_befo3 = 200;
-//    private double X_befo4 = 200;
-//    private double X_befo5 = 200;
-//    private double X_befo6 = 200;
-//    private double X_befo7 = 200;
-//    private double X_befo8 = 200;
-//    private double X_befo9 = 200;
-
-//    private int count_over = 0;
-
-
-
-//    // Start is called once before the first execution of Update after the MonoBehaviour is created
-//    void Start()
-//    {
-
-//    }
-
-//    // Update is called once per frame
-//    void Update()
-//    {
-//        if (M5.getAngX() <= 180) {
-//            move();
-//        }
-//    }
-
-
-//    private void move()
-//    {
-//        X_befo9 = X_befo8;
-//        X_befo8 = X_befo7;
-//        X_befo7 = X_befo6;
-//        X_befo6 = X_befo5;
-//        X_befo5 = X_befo4;
-//        X_befo4 = X_befo3;
-//        X_befo3 = X_befo2;
-//        X_befo2 = X_befo1;
-//        X_befo1 = X_now;
-
-//        X_now = M5.getAngX();
-
-//        if (X_now > -170 || X_now < -180) count_over++;
-
-//        X_now += 360 * count_over;
-
-
-//        if (Math.Abs(X_now - X_befo1) < 10)
-//        {
-//            Debug.Log("静止");
-//        }
-//        else
-//        {
-//            if (X_now > X_befo1)
-//            {
-//                Debug.Log("前");
-//            }
-//            else
-//            {
-//                Debug.Log("後");
-//            }
-//        }
-
-
-
-
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 using System;
 using UnityEngine;
 
@@ -102,7 +7,7 @@ public class moveSample : MonoBehaviour
     [Header("M5StickのBluetooth受信クラス")]
     private M5BluetoothReceiver M5;
 
-    [SerializeField]
+    [SerializeField, Tooltip("ShareMoveRatioDataインスタンス")]
     private ShareMoveRatioData shareMoveRatioData;
 
     [SerializeField, Tooltip("ジャンプのクラス")]

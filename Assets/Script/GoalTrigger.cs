@@ -8,7 +8,7 @@ public class GoalTrigger : MonoBehaviour
         // Playerタグがついているオブジェクトと接触したら
         if (other.CompareTag("Player"))
         {
-            //Debug.LogError("🚨 ゴール判定 🚨");
+            Debug.Log("🚨 ゴール判定 🚨");
 
 
             // Timerスクリプトを探して、ゴール処理を呼び出す

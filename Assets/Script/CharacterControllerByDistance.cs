@@ -2,22 +2,33 @@ using UnityEngine;
 
 public class CharacterControllerByDistance : MonoBehaviour
 {
-    public float moveSpeed = 2f; // 前進速度
-    public float threshold = 30f; // この距離以下で動く
+    public float speedScale = 0.05f; // センサーの動きをゲーム速度に変換する倍率
+
+    private float prevDistance;
+
+    void Start()
+    {
+        prevDistance = DistanceSensorReader1.distance;
+    }
 
     void Update()
     {
-        // DistanceSensorReader1.distance から取得
         float currentDistance = DistanceSensorReader1.distance;
 
-        if (currentDistance <= threshold)
+        // センサーの変化量を時間で割って「速さ」にする
+        float delta = (prevDistance - currentDistance) / Time.deltaTime;
+
+        if (delta > 0)
         {
-            // 前進
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            // 距離が短くなっているときだけ前進
+            float moveAmount = delta * speedScale * Time.deltaTime;
+            transform.Translate(Vector3.forward * moveAmount);
         }
         else
         {
-            // 停止（何もしない）
+            // 戻すとき or 止まってるとき → キャラも止まる（何もしない）
         }
+
+        prevDistance = currentDistance;
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FollowCamera : MonoBehaviour
+public class CameraScript : MonoBehaviour
 {
     private Transform parentTransform;
 

@@ -8,8 +8,8 @@ public class DistanceSensorReader1 : MonoBehaviour
     public string portName = "/dev/cu.usbserial-0001"; // Macの場合
     public int baudRate = 115200; // SchooMyの設定に合わせる
 
-    [Header("UI")]
-    public TextMeshProUGUI distanceText;
+    //[Header("UI")]
+    //public TextMeshProUGUI distanceText;
 
     private SerialPort serial;
     // 他スクリプトから参照できる
@@ -33,7 +33,7 @@ public class DistanceSensorReader1 : MonoBehaviour
                 {
                     distance = value;
                     // UIに表示（小数点1桁まで）
-                    distanceText.text = $"{distance:F0}";
+                    //distanceText.text = $"{distance:F0}";
 
                 }
             }

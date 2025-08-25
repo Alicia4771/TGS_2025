@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class GoalTrigger : MonoBehaviour
 {
+    
     void OnTriggerEnter(Collider other)
     {
         // Playerタグがついているオブジェクトと接触したら
         if (other.CompareTag("Player"))
         {
-            Debug.Log("🚨 ゴール判定 🚨");
+            //Debug.Log("🚨 ゴール判定 🚨");
 
 
             // Timerスクリプトを探して、ゴール処理を呼び出す

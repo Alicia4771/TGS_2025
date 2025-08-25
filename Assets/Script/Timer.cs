@@ -17,6 +17,10 @@ public class Timer : MonoBehaviour
     private bool isTimer = false;
     private bool isGoal = false; // ゴール済みフラグ
 
+    // ゴールした時の効果音
+    public AudioSource goalAudioSource; // AudioSourceコンポーネントへの参照
+    public AudioClip goalSoundEffect;   // 再生したいオーディオクリップ
+
     void Start()
     {
         currentTime = time_limit;
@@ -68,6 +72,14 @@ public class Timer : MonoBehaviour
     private void ShowResultByTime()
     {
         float elapsedTime = time_limit - currentTime;
+
+        // 効果音を再生
+        if (goalAudioSource != null && goalSoundEffect != null)
+        {
+            goalAudioSource.PlayOneShot(goalSoundEffect);
+        }
+
+
 
         if (elapsedTime <= (time_limit / 2))
         {

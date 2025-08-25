@@ -92,6 +92,9 @@ public class PlayerCollision : MonoBehaviour
     // デバフが付与された瞬間の時間
     private double debuff_start_time;
 
+    public AudioSource spiderAudioSource; // AudioSourceコンポーネントへの参照
+    public AudioClip spiderSoundEffect;   // 再生したいオーディオクリップ
+
     private void Start()
     {
         debuff_start_time = -10;
@@ -112,7 +115,13 @@ public class PlayerCollision : MonoBehaviour
                 //Debug.Log("🕷️ 蜘蛛に当たった！");
 
                 // 当たり判定がとられたところにこれを書く
-                player.collision(time, slow);
+                player.collision(2, 0.1f);
+
+                // 効果音を再生
+                if (spiderAudioSource != null && spiderSoundEffect != null)
+                {
+                    spiderAudioSource.PlayOneShot(spiderSoundEffect);
+                }
 
                 // 画面を揺らす処理
                 if (FollowCamera != null)

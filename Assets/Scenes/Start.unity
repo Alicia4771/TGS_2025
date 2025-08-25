@@ -881,10 +881,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef19ecd484c0547769ac3647af201be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thresholdDown: 20
+  thresholdDown: 40
   thresholdUp: 100
   nextSceneName: game
-  startupDelay: 2
+  startupDelay: 1
 --- !u!4 &1870169967
 Transform:
   m_ObjectHideFlags: 0

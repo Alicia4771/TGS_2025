@@ -21,7 +21,7 @@ public class WebOverlay3DController : MonoBehaviour
     {
         SetVisible(true);
         // 効果音を再生
-        if (spiderWebAudioSource != null && spiderWebAudioSource != null)
+        if (spiderWebAudioSource != null && spiderWebSoundEffect != null)
         {
             spiderWebAudioSource.PlayOneShot(spiderWebSoundEffect);
         }

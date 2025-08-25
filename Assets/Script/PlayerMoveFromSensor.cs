@@ -84,6 +84,18 @@ public class PlayerMoveFromSensor : MonoBehaviour
     // パーティクルシステムへの参照
     public ParticleSystem windParticles;
 
+    // 風の効果音
+    public AudioSource windAudioSource; // AudioSourceコンポーネントへの参照
+    public AudioClip windSoundEffect;   // 再生したいオーディオクリップ
+
+    // ジャンプの効果音
+    public AudioSource jumpAudioSource; // AudioSourceコンポーネントへの参照
+    public AudioClip jumpSoundEffect;   // 再生したいオーディオクリップ
+
+    // 溜めゲージの効果音
+    public AudioSource chargeAudioSource; // AudioSourceコンポーネントへの参照
+    public AudioClip chargeSoundEffect;   // 再生したいオーディオクリップ
+
 
     private void Awake()
     {
@@ -152,12 +164,13 @@ public class PlayerMoveFromSensor : MonoBehaviour
         {
             if (jamp_flag)  // ジャンプ中
             {
-                UnityEngine.Debug.Log("ジャンプフラグON");
+                //UnityEngine.Debug.Log("ジャンプフラグON");
                 t += (float)Time.deltaTime;
 
                 float x = (v0 * cos) * t;
                 float y = ((v0 * sin) * t) - (g * (t * t) / 2);
 
+           
                 Vector3 new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y + y, jamp_start_pos.z + x);
 
                 // ジャンプ前の高さに戻ってきたらジャンプ終了
@@ -168,7 +181,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                 }
 
                 this.transform.position = new_pos;
-                UnityEngine.Debug.Log("ジャンプしたよ");
+                //UnityEngine.Debug.Log("ジャンプしたよ");
             }
             else
             {
@@ -191,9 +204,15 @@ public class PlayerMoveFromSensor : MonoBehaviour
                         {
                             chargeSlider.value = charge_count;
                         }
+
+                        // 効果音を再生
+                        if (chargeAudioSource != null && chargeSoundEffect != null && !chargeAudioSource.isPlaying)
+                        {
+                            chargeAudioSource.PlayOneShot(chargeSoundEffect);
+                        }
                     }
-                    UnityEngine.Debug.Log("ため開始");
-                    UnityEngine.Debug.Log("charge_count: " + charge_count);
+                    //UnityEngine.Debug.Log("ため開始");
+                    //UnityEngine.Debug.Log("charge_count: " + charge_count);
                     // 停止しているとき、停止
                     windParticles.Stop();
                 }
@@ -241,7 +260,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                         if (charge_count > 0)
                         {
                             jamp();
-                            UnityEngine.Debug.Log("jumpスレッド呼び出し");
+                            //UnityEngine.Debug.Log("jumpスレッド呼び出し");
                         }
                     }
 
@@ -272,10 +291,14 @@ public class PlayerMoveFromSensor : MonoBehaviour
         {
             // 動いているとき、再生
             windParticles.Play();
-            UnityEngine.Debug.Log("風吹く");
+            if (windAudioSource != null && windSoundEffect != null && !windAudioSource.isPlaying)
+            {
+                windAudioSource.PlayOneShot(windSoundEffect);
+            }
+            //UnityEngine.Debug.Log("風吹く");
             Vector3 dir = transform.forward; // ← 常にキャラの向きで進む
             rb.AddForce(dir * force * move_diameter * collision_diameter, mode);
-            UnityEngine.Debug.Log("進む");
+            //UnityEngine.Debug.Log("進む");
         }
         else
         {
@@ -336,6 +359,15 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
         jamp_start_pos = this.transform.position;
 
+        // 音楽を止める
+        chargeAudioSource.Stop();
+
+        // 効果音を再生
+        if (jumpAudioSource != null && jumpSoundEffect != null)
+        {
+            jumpAudioSource.PlayOneShot(jumpSoundEffect);
+        }
+
         // `charge_count` をリセット
         charge_count = 0;
         chargeSlider.value = 0;
@@ -348,7 +380,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
         collision_diameter = (float)slow;
         debuff_time = time;
         collision_flag = true;
-        UnityEngine.Debug.Log("遅くなる");
+        //UnityEngine.Debug.Log("遅くなる");
     }
 
 }

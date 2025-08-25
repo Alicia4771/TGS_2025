@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Diagnostics;
 using UnityEngine.Windows;
+using UnityEngine.UI; // ← 追加
 
 public class PlayerMoveFromSensor : MonoBehaviour
 {
@@ -76,6 +77,13 @@ public class PlayerMoveFromSensor : MonoBehaviour
     [SerializeField, Tooltip("キャラの最大速度")]
     private float maxSpeed = 5f; // ← インスペクタから調整可能にする
 
+    [SerializeField, Tooltip("チャージゲージ UI")]
+    private Slider chargeSlider; // ← インスペクタから割り当てる
+
+
+    // パーティクルシステムへの参照
+    public ParticleSystem windParticles;
+
 
     private void Awake()
     {
@@ -84,6 +92,11 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
     void Start()
     {
+        // ゲーム開始時にパーティクルを停止
+        if (windParticles != null)
+        {
+            windParticles.Stop();
+        }
         distance_value_history = new float[DISTANCE_VALUE_HOW];
         for (int i = 0; i < DISTANCE_VALUE_HOW; i++) distance_value_history[i] = -1;
 
@@ -101,6 +114,13 @@ public class PlayerMoveFromSensor : MonoBehaviour
         jamp_flag = false;
         collision_flag = false;
         move_flag = false;
+
+        // ゲージの最大値をチャージの最大に合わせる
+        if (chargeSlider != null)
+        {
+            chargeSlider.maxValue = charge_count_max;
+            chargeSlider.value = 0;
+        }
     }
 
 
@@ -108,6 +128,8 @@ public class PlayerMoveFromSensor : MonoBehaviour
     {
         // 距離センサーからの値を取得
         distance_value = DistanceSensorReader1.distance;
+
+
 
         // `distance_value_history`の値を１つずらして最新の値をセットする
         for (int i = DISTANCE_VALUE_HOW - 1; i > 0; i--) distance_value_history[i] = distance_value_history[i - 1];
@@ -164,9 +186,16 @@ public class PlayerMoveFromSensor : MonoBehaviour
                     else
                     {
                         charge_count++;
+                        // 毎フレームゲージを更新
+                        if (chargeSlider != null)
+                        {
+                            chargeSlider.value = charge_count;
+                        }
                     }
                     UnityEngine.Debug.Log("ため開始");
                     UnityEngine.Debug.Log("charge_count: " + charge_count);
+                    // 停止しているとき、停止
+                    windParticles.Stop();
                 }
                 else
                 {
@@ -175,6 +204,8 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
                     if (Math.Abs(inclination_value) < immovable_th)
                     {
+                        // 停止しているとき、停止
+                        windParticles.Stop();
                         // 動いていない
                         situation = 0;
                         move_flag = false;
@@ -196,6 +227,8 @@ public class PlayerMoveFromSensor : MonoBehaviour
                         }
                         else
                         {
+                            // 停止しているとき、停止
+                            windParticles.Stop();
                             // 戻っている
                             situation = -1;
                             move_flag = false;
@@ -229,12 +262,17 @@ public class PlayerMoveFromSensor : MonoBehaviour
                 }
             }
         }
+
+
     }
 
     private void FixedUpdate()
     {
         if (move_flag)
         {
+            // 動いているとき、再生
+            windParticles.Play();
+            UnityEngine.Debug.Log("風吹く");
             Vector3 dir = transform.forward; // ← 常にキャラの向きで進む
             rb.AddForce(dir * force * move_diameter * collision_diameter, mode);
             UnityEngine.Debug.Log("進む");
@@ -285,6 +323,8 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
     private void jamp()
     {
+        // 動いているとき、再生
+        windParticles.Play();
         jamp_flag = true;
 
         t = 0;
@@ -298,6 +338,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
         // `charge_count` をリセット
         charge_count = 0;
+        chargeSlider.value = 0;
     }
 
 

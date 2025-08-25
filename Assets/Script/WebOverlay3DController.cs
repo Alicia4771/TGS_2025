@@ -5,8 +5,8 @@ public class WebOverlay3DController : MonoBehaviour
 {
 
     // ----- 新しく追加する変数とコンポーネント -----
-    public AudioSource windAudioSource; // AudioSourceコンポーネントへの参照
-    public AudioClip windSoundEffect;   // 再生したいオーディオクリップ
+    public AudioSource spiderWebAudioSource; // AudioSourceコンポーネントへの参照
+    public AudioClip spiderWebSoundEffect;   // 再生したいオーディオクリップ
 
     public float showTime = 3f;
     private Renderer[] renderers;
@@ -20,6 +20,11 @@ public class WebOverlay3DController : MonoBehaviour
     public void ShowOnce()
     {
         SetVisible(true);
+        // 効果音を再生
+        if (spiderWebAudioSource != null && spiderWebAudioSource != null)
+        {
+            spiderWebAudioSource.PlayOneShot(spiderWebSoundEffect);
+        }
         StartCoroutine(HideAfterSeconds(showTime));
     }
 

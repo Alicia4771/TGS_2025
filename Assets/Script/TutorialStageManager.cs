@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 public class TutorialStageManager : MonoBehaviour
 {
+    private string nextSceneName = "game";
+
     public enum WaitType
     {
         None,   // 時間経過で進む
@@ -134,6 +138,15 @@ public class TutorialStageManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(false);
 
             // TODO: ここで本編のゲーム開始処理を呼ぶ
+            if (DistanceSensorReader1.distance > 30f)
+            {
+                PlayerMoveFromSensor.move_diameter = 2.0f;
+                SceneManager.LoadScene(nextSceneName);
+            } else if (DistanceSensorReader1.distance > 50f)
+            {
+                PlayerMoveFromSensor.move_diameter = 1.0f;
+                SceneManager.LoadScene(nextSceneName);
+            }
         }
     }
 

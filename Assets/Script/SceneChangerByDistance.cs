@@ -6,7 +6,7 @@ public class SceneChangerByDistance : MonoBehaviour
     // センサーの値を判断するための閾値
     public float thresholdDown = 20f;
     public float thresholdUp = 100f;
-    public string nextSceneName = "game";
+    private string nextSceneName = "tutorial";
 
     // センサー値が安定するまでの待機時間（秒）
     public float startupDelay = 2.0f;

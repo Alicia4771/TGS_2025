@@ -958,8 +958,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thresholdDown: 40
-  thresholdUp: 100
-  nextSceneName: game
+  thresholdUp: 90
+  nextSceneName: tutorial
   startupDelay: 1
 --- !u!4 &1870169967
 Transform:

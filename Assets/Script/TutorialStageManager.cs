@@ -26,14 +26,51 @@ public class TutorialStageManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Image tutorialImage;
 
+    [Header("難易度表示用の画像")]
+    [SerializeField] private Image nanidoImage;
+
+    [Header("普通用の画像")]
+    [SerializeField] private Image nomalImage;
+
+    [Header("簡単用の画像")]
+    [SerializeField] private Image easyImage;
+
     [Header("ステップ設定")]
     [SerializeField] private TutorialStep[] tutorialSteps;
 
     private int currentStep = 0;
     private bool waitingForInput = false;
 
+    // 距離センサーの値
+    private float distance_value;
+    private float normalDistance = 40f;    // 普通難易度までの距離
+    private float easyDistance = 65f;     // 簡単難易度までの距離
+    private float standardDistance = 90f;     // 基準距離
+
+    // 難易度選択用フラグ
+    bool sceneChanged = false;
+
+    bool isEasyCandidate;
+    bool isNormalCandidate;
+
+    // 2. 基準距離より大きいかを判別
+    bool aboveStandard;
+
+    // 2. 難易度選択中かを判別
+    bool isNanido = false;
+
     void Start()
     {
+        // チュートリアル説明用の文字画像の初期化
+        tutorialImage.gameObject.SetActive(true);
+
+        // 難易度説明用の文字画像の初期化
+        nanidoImage.enabled = false;
+        nomalImage.enabled = false;
+        easyImage.enabled = false;
+        sceneChanged = false;
+        isNanido = false;
+
         if (tutorialSteps.Length > 0)
         {
             ShowStep(0);
@@ -42,6 +79,16 @@ public class TutorialStageManager : MonoBehaviour
 
     void Update()
     {
+        // 距離センサーからの値を取得
+        distance_value = DistanceSensorReader1.distance;
+
+        // 1. 距離が簡単距離より大きいか、普通距離より大きいかを判別
+        isEasyCandidate = distance_value > easyDistance;
+        isNormalCandidate = distance_value > normalDistance;
+
+        // 2. 基準距離より大きいかを判別
+        aboveStandard = distance_value > standardDistance;
+
         // 入力待ち中はここで判定
         if (waitingForInput)
         {
@@ -62,6 +109,43 @@ public class TutorialStageManager : MonoBehaviour
                     PlayerMoveFromSensor.Jumped = false;
 
                 }
+            }
+        }
+
+        // 難易度を選択する
+        if (isNanido)
+        {
+            Debug.Log("nanido選択");
+            // 3. 難易度を決定してシーン切り替え
+            if (!sceneChanged)
+            {
+                if (isEasyCandidate && aboveStandard)
+                {
+                    Debug.Log("簡単モードを選択");
+                    nanidoImage.enabled = false;
+                    easyImage.enabled = true;
+                    PlayerMoveFromSensor.move_diameter = 2.0f;
+                    //SceneManager.LoadScene(nextSceneName);
+                    sceneChanged = true;
+                    StartCoroutine(LoadSceneWithDelay(3f)); // ← 3秒後にシーン切り替え
+                }
+                else if (isNormalCandidate && aboveStandard)
+                {
+                    Debug.Log("普通モードを選択");
+                    nanidoImage.enabled = false;
+                    nomalImage.enabled = true;
+                    PlayerMoveFromSensor.move_diameter = 1.0f;
+                    //SceneManager.LoadScene(nextSceneName);
+                    sceneChanged = true;
+                    StartCoroutine(LoadSceneWithDelay(3f)); // ← 3秒後にシーン切り替え
+                }
+                //else
+                //{
+                //    Debug.Log("ハードモードを選択");
+                //    PlayerMoveFromSensor.move_diameter = 0.5f;
+                //    SceneManager.LoadScene(nextSceneName);
+                //    sceneChanged = true;
+                //}
             }
         }
     }
@@ -91,9 +175,18 @@ public class TutorialStageManager : MonoBehaviour
     //    }
     //}
 
+    // 時間が立ってからシーンを切り替える用のコルーチン
+    private IEnumerator LoadSceneWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(nextSceneName);
+    }
+
 
 
     private Coroutine autoStepRoutine;
+
+
 
     private void ShowStep(int step)
     {
@@ -126,27 +219,28 @@ public class TutorialStageManager : MonoBehaviour
     private void NextStep()
     {
         currentStep++;
-        Debug.Log("currentStep" + currentStep);
-        Debug.Log("steps.Length" + tutorialSteps.Length);
+        //Debug.Log("currentStep" + currentStep);
+        //Debug.Log("steps.Length" + tutorialSteps.Length);
         if (currentStep < tutorialSteps.Length)
         {
             ShowStep(currentStep);
         }
         else
         {
-            Debug.Log("Tutorial Finished → GameStart!");
+            //Debug.Log("Tutorial Finished → GameStart!");
             tutorialImage.gameObject.SetActive(false);
 
+            //難易度選択が動かなかった時の保険
+            //SceneManager.LoadScene(nextSceneName);
+
+
+
             // TODO: ここで本編のゲーム開始処理を呼ぶ
-            if (DistanceSensorReader1.distance > 30f)
-            {
-                PlayerMoveFromSensor.move_diameter = 2.0f;
-                SceneManager.LoadScene(nextSceneName);
-            } else if (DistanceSensorReader1.distance > 50f)
-            {
-                PlayerMoveFromSensor.move_diameter = 1.0f;
-                SceneManager.LoadScene(nextSceneName);
-            }
+            nanidoImage.enabled = true;
+            isNanido = true;
+
+
+            
         }
     }
 

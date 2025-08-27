@@ -16315,7 +16315,7 @@ MonoBehaviour:
   force: 400
   brake: 25
   move_distance: 0.5
-  immovable_th: 0.65
+  immovable_th: 0.5
   charge_th: 15
   angle_degree: 45
   v0_adjustment: 0.027

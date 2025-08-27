@@ -430,7 +430,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
     private float move_distance;
 
     [SerializeField, Tooltip("進む時にかける倍率")]
-    public static float move_diameter;
+    public static float move_diameter = 1.0f;
 
     //[SerializeField, Tooltip("障害物に当たった時にかける倍率")]
     private float collision_diameter;

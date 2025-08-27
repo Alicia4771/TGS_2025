@@ -124,7 +124,7 @@ public class TutorialStageManager : MonoBehaviour
                     Debug.Log("簡単モードを選択");
                     nanidoImage.enabled = false;
                     easyImage.enabled = true;
-                    PlayerMoveFromSensor.move_diameter = 2.0f;
+                    PlayerMoveFromSensor.move_diameter = 1.0f;
                     //SceneManager.LoadScene(nextSceneName);
                     sceneChanged = true;
                     StartCoroutine(LoadSceneWithDelay(3f)); // ← 3秒後にシーン切り替え

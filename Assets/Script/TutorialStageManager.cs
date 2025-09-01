@@ -83,8 +83,21 @@ public class TutorialStageManager : MonoBehaviour
         distance_value = DistanceSensorReader1.distance;
 
         // 1. 距離が簡単距離より大きいか、普通距離より大きいかを判別
-        isEasyCandidate = distance_value > easyDistance;
-        isNormalCandidate = distance_value > normalDistance;
+        if (distance_value > normalDistance)
+        {
+            isEasyCandidate = false;
+            isNormalCandidate = true;
+        }
+        else if (distance_value > easyDistance)
+        {
+            isEasyCandidate = true;
+            isNormalCandidate = false;
+        }
+        else
+        {
+            isEasyCandidate = false;
+            isNormalCandidate = false;
+        }
 
         // 2. 基準距離より大きいかを判別
         aboveStandard = distance_value > standardDistance;
@@ -240,7 +253,7 @@ public class TutorialStageManager : MonoBehaviour
             isNanido = true;
 
 
-            
+
         }
     }
 

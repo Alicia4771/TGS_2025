@@ -22,7 +22,7 @@
 //    private float move_distance;
 
 //    [SerializeField, Tooltip("進む時にかける倍率")]
-//    private float move_diameter;
+//    public static float move_diameter = 1.0f;
 
 //    //[SerializeField, Tooltip("障害物に当たった時にかける倍率")]
 //    private float collision_diameter;
@@ -80,6 +80,10 @@
 //    [SerializeField, Tooltip("チャージゲージ UI")]
 //    private Slider chargeSlider; // ← インスペクタから割り当てる
 
+//    // チュートリアル用のフラグ、チャージとジャンプ
+//    public static bool Charged = false;
+//    public static bool Jumped = false;
+
 
 //    // パーティクルシステムへの参照
 //    public ParticleSystem windParticles;
@@ -133,7 +137,10 @@
 //            chargeSlider.maxValue = charge_count_max;
 //            chargeSlider.value = 0;
 //        }
-//    }
+
+//        Charged = false;
+//        Jumped = false;
+//}
 
 
 //    void Update()
@@ -205,6 +212,8 @@
 //                            chargeSlider.value = charge_count;
 //                        }
 
+//                        // チュートリアル用のフラグ関数
+//                        SomeChargeDetectMethod();
 //                        // 効果音を再生
 //                        if (chargeAudioSource != null && chargeSoundEffect != null && !chargeAudioSource.isPlaying)
 //                        {
@@ -346,9 +355,11 @@
 
 //    private void jamp()
 //    {
+//        tutorialJamp();
 //        // 動いているとき、再生
 //        windParticles.Play();
 //        jamp_flag = true;
+
 
 //        t = 0;
 //        angle_rad = angle_degree * Math.PI / 180.0;
@@ -371,6 +382,10 @@
 //        // `charge_count` をリセット
 //        charge_count = 0;
 //        chargeSlider.value = 0;
+
+//        Charged = false;
+
+
 //    }
 
 
@@ -383,15 +398,19 @@
 //        //UnityEngine.Debug.Log("遅くなる");
 //    }
 
+//    // チュートリアルでのチャージのフラグ
+//    private void SomeChargeDetectMethod()
+//    {
+//        Charged = true;
+//    }
+
+//    // チュートリアルでのジャンプのフラグ
+//    private void tutorialJamp()
+//    {
+//        // 既存ジャンプ処理
+//        Jumped = true;
+//    }
 //}
-
-
-
-
-
-
-
-
 
 
 
@@ -448,7 +467,9 @@ public class PlayerMoveFromSensor : MonoBehaviour
     private float immovable_th = 10;
 
     private float start_distance;       // 進め始めた時の地点
+    [SerializeField, Tooltip("基準となる開始地点の距離センサーの値")]
     private float start_line_distance;  // 基準となる開始地点の距離
+    private bool start_line_distance_isSet;
 
     // playerの状態（-1:戻, 0：止, 1：進）
     private int situation;
@@ -526,6 +547,16 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
         collision_diameter = 1;
 
+        // スタートラインの基準値を指定した値にするか、スタート時の平均値にするか
+        if (start_line_distance != null && start_line_distance >= 0)
+        {
+            start_line_distance_isSet = true;
+        }
+        else
+        {
+            start_line_distance_isSet = false;
+        }
+
         is_distance_array_full = false;
         start_distance = 0;
         start_line_distance = 0;
@@ -548,7 +579,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
         Charged = false;
         Jumped = false;
-}
+    }
 
 
     void Update()
@@ -568,11 +599,15 @@ public class PlayerMoveFromSensor : MonoBehaviour
             {
                 is_distance_array_full = true;  // 配列の中身が全て埋まった
 
-                // スタート位置を決定する
-                for (int i = 0; i < DISTANCE_VALUE_HOW; i++) start_line_distance += distance_value_history[i];
-                start_line_distance /= DISTANCE_VALUE_HOW;
+                // スタートの基準値が指定値で指定されていない
+                if (!start_line_distance_isSet)
+                {
+                    // スタート位置を決定する
+                    for (int i = 0; i < DISTANCE_VALUE_HOW; i++) start_line_distance += distance_value_history[i];
+                    start_line_distance /= DISTANCE_VALUE_HOW;
 
-                start_distance = start_line_distance;
+                    start_distance = start_line_distance;
+                }
             }
         }
         else
@@ -792,7 +827,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
         chargeSlider.value = 0;
 
         Charged = false;
-        
+
 
     }
 

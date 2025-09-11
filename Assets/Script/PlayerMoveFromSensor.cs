@@ -40,7 +40,9 @@
 //    private float immovable_th = 10;
 
 //    private float start_distance;       // 進め始めた時の地点
+//    [SerializeField, Tooltip("基準となる開始地点の距離センサーの値")]
 //    private float start_line_distance;  // 基準となる開始地点の距離
+//    private bool start_line_distance_isSet;
 
 //    // playerの状態（-1:戻, 0：止, 1：進）
 //    private int situation;
@@ -118,9 +120,18 @@
 
 //        collision_diameter = 1;
 
+//        // スタートラインの基準値を指定した値にするか、スタート時の平均値にするか
+//        if (start_line_distance != null && start_line_distance >= 0)
+//        {
+//            start_line_distance_isSet = true;
+//        }
+//        else
+//        {
+//            start_line_distance_isSet = false;
+//        }
+
 //        is_distance_array_full = false;
 //        start_distance = 0;
-//        start_line_distance = 0;
 
 //        situation = 0;
 //        situation_before = 0;
@@ -140,7 +151,7 @@
 
 //        Charged = false;
 //        Jumped = false;
-//}
+//    }
 
 
 //    void Update()
@@ -160,11 +171,15 @@
 //            {
 //                is_distance_array_full = true;  // 配列の中身が全て埋まった
 
-//                // スタート位置を決定する
-//                for (int i = 0; i < DISTANCE_VALUE_HOW; i++) start_line_distance += distance_value_history[i];
-//                start_line_distance /= DISTANCE_VALUE_HOW;
+//                // スタートの基準値が指定値で指定されていない
+//                if (!start_line_distance_isSet)
+//                {
+//                    // スタート位置を決定する
+//                    for (int i = 0; i < DISTANCE_VALUE_HOW; i++) start_line_distance += distance_value_history[i];
+//                    start_line_distance /= DISTANCE_VALUE_HOW;
 
-//                start_distance = start_line_distance;
+//                    start_distance = start_line_distance;
+//                }
 //            }
 //        }
 //        else
@@ -425,6 +440,8 @@
 
 
 
+
+
 using UnityEngine;
 using System;
 using System.Diagnostics;
@@ -486,18 +503,15 @@ public class PlayerMoveFromSensor : MonoBehaviour
     private Vector3 jamp_start_pos;
 
     private float t;   // 時刻
-    [SerializeField, Tooltip("ジャンプする時の角度[度]")]
-    private int angle_degree;   // なす角[°]
-    private double angle_rad;   // なす角[rad]
-    private float cos;
-    private float sin;
-    private float v0;   // 初速度（溜めた量）
+    private float v_y;
+    private float v_z;
+
     private float a;    // 加速度（溜め開放後に伸ばした量）
     private const float g = (float)9.8;   // 重力加速度
 
-    [SerializeField, Tooltip("初速度調整用の値")]
+    [SerializeField, Tooltip("溜めた量にかける値")]
     private float v0_adjustment;
-    [SerializeField, Tooltip("加速度調整用の値")]
+    [SerializeField, Tooltip("伸ばした量にかける値")]
     private float a_adjustment;
 
     [SerializeField, Tooltip("チャージカウントの最大値")]
@@ -533,6 +547,8 @@ public class PlayerMoveFromSensor : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        // 物理演算による回転を固定
+        rb.freezeRotation = true;
     }
 
     void Start()
@@ -559,7 +575,8 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
         is_distance_array_full = false;
         start_distance = 0;
-        start_line_distance = 0;
+        if (!start_line_distance_isSet) start_line_distance = 0;
+
 
         situation = 0;
         situation_before = 0;
@@ -617,16 +634,18 @@ public class PlayerMoveFromSensor : MonoBehaviour
                 //UnityEngine.Debug.Log("ジャンプフラグON");
                 t += (float)Time.deltaTime;
 
-                float x = (v0 * cos) * t;
-                float y = ((v0 * sin) * t) - (g * (t * t) / 2);
+                //float x = (v0 * cos) * t;
+                // float y = ((v0 * sin) * t) - (g * (t * t) / 2);
+                float z = v_z * t;
+                float y = (v_y * t) - (g * (t * t) / 2);
 
 
-                Vector3 new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y + y, jamp_start_pos.z + x);
+                Vector3 new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y + y, jamp_start_pos.z + z);
 
                 // ジャンプ前の高さに戻ってきたらジャンプ終了
                 if (jamp_start_pos.y + y < jamp_start_pos.y)
                 {
-                    new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y, jamp_start_pos.z + x);
+                    new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y, jamp_start_pos.z + z);
                     jamp_flag = false;
                 }
 
@@ -805,11 +824,9 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
 
         t = 0;
-        angle_rad = angle_degree * Math.PI / 180.0;
-        cos = (float)Math.Cos(angle_rad);
-        sin = (float)Math.Sin(angle_rad);
-        v0 = (charge_count * v0_adjustment) + ((start_distance - distance_value) * a_adjustment);
-        a = (start_distance - distance_value) * a_adjustment;
+        v_y = charge_count * v0_adjustment;
+        //v_z = (start_distance - distance_value) * a_adjustment;
+        v_z = Math.Abs(start_distance - distance_value) * a_adjustment;
 
         jamp_start_pos = this.transform.position;
 

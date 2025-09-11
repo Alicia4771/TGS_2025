@@ -957,9 +957,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef19ecd484c0547769ac3647af201be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thresholdDown: 40
-  thresholdUp: 90
-  nextSceneName: tutorial
+  thresholdDown: 45
+  thresholdUp: 55
   startupDelay: 1
 --- !u!4 &1870169967
 Transform:

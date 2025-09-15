@@ -133,14 +133,14 @@ public class PlayerCollision : MonoBehaviour
                     Debug.LogError("CameraScript がアサインされていません！");
                 }
                 // ここにダメージ処理 or スローダウン処理
-                Debug.Log("🕷️ 蜘蛛に当たった！");
+                //Debug.Log("🕷️ 蜘蛛に当たった！");
             }
 
             if (other.CompareTag("SpiderWeb"))
             {
                 // 当たり判定がとられたところにこれを書く
                 player.collision(time, slow);
-                Debug.Log("🕸️ 蜘蛛の巣に引っかかった！");
+                //Debug.Log("🕸️ 蜘蛛の巣に引っかかった！");
                 if (webController != null)
                 {
                     webController.ShowOnce();

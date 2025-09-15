@@ -529,7 +529,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
 
     // パーティクルシステムへの参照
-    public ParticleSystem windParticles;
+    //public ParticleSystem windParticles;
 
     // 風の効果音
     public AudioSource windAudioSource; // AudioSourceコンポーネントへの参照
@@ -554,10 +554,10 @@ public class PlayerMoveFromSensor : MonoBehaviour
     void Start()
     {
         // ゲーム開始時にパーティクルを停止
-        if (windParticles != null)
-        {
-            windParticles.Stop();
-        }
+        //if (windParticles != null)
+        //{
+        //    windParticles.Stop();
+        //}
         distance_value_history = new float[DISTANCE_VALUE_HOW];
         for (int i = 0; i < DISTANCE_VALUE_HOW; i++) distance_value_history[i] = -1;
 
@@ -685,7 +685,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                     //UnityEngine.Debug.Log("ため開始");
                     //UnityEngine.Debug.Log("charge_count: " + charge_count);
                     // 停止しているとき、停止
-                    windParticles.Stop();
+                    //windParticles.Stop();
                 }
                 else
                 {
@@ -695,7 +695,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                     if (Math.Abs(inclination_value) < immovable_th)
                     {
                         // 停止しているとき、停止
-                        windParticles.Stop();
+                        //windParticles.Stop();
                         // 動いていない
                         situation = 0;
                         move_flag = false;
@@ -718,7 +718,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                         else
                         {
                             // 停止しているとき、停止
-                            windParticles.Stop();
+                            //windParticles.Stop();
                             // 戻っている
                             situation = -1;
                             move_flag = false;
@@ -761,7 +761,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
         if (move_flag)
         {
             // 動いているとき、再生
-            windParticles.Play();
+            //windParticles.Play();
             if (windAudioSource != null && windSoundEffect != null && !windAudioSource.isPlaying)
             {
                 windAudioSource.PlayOneShot(windSoundEffect);
@@ -819,7 +819,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
     {
         tutorialJamp();
         // 動いているとき、再生
-        windParticles.Play();
+        //windParticles.Play();
         jamp_flag = true;
 
 

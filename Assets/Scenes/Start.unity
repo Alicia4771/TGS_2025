@@ -199,8 +199,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 37, y: -460}
-  m_SizeDelta: {x: 1033.185, y: 726.698}
+  m_AnchoredPosition: {x: -30, y: -438}
+  m_SizeDelta: {x: 801.361, y: 596.297}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &84169901
 MonoBehaviour:
@@ -957,9 +957,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef19ecd484c0547769ac3647af201be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thresholdDown: 45
-  thresholdUp: 55
-  startupDelay: 1
+  baseDistance: 55
+  downOffset: -20
+  upOffset: 5
+  startupDelay: 2
+  sampleCount: 50
+  nextSceneName: tutorial1
 --- !u!4 &1870169967
 Transform:
   m_ObjectHideFlags: 0

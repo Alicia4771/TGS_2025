@@ -980,6 +980,7 @@ GameObject:
   - component: {fileID: 1206715505}
   - component: {fileID: 1206715507}
   - component: {fileID: 1206715506}
+  - component: {fileID: 1206715508}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -1003,8 +1004,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 645.16003, y: -333.07114}
-  m_SizeDelta: {x: 629.6799, y: 413.8577}
+  m_AnchoredPosition: {x: 568.76416, y: -318.92377}
+  m_SizeDelta: {x: 782.4715, y: 442.1524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1206715506
 MonoBehaviour:
@@ -1026,7 +1027,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6f9d0b3caa16b42d988b3d6de645f043, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2713069d44df4d1cbfb689831c4ce09, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1044,6 +1045,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1206715504}
   m_CullTransparentMesh: 1
+--- !u!114 &1206715508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206715504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3656988274854031ba77ec9584f2ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetImage: {fileID: 1206715506}
+  minScale: 1
+  maxScale: 1.3
+  speed: 4
 --- !u!1 &1332410642
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,8 +1559,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035, y: -0.00048828}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_AnchoredPosition: {x: -145, y: -31}
+  m_SizeDelta: {x: 2887.6812, y: 1674.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1617769290
 MonoBehaviour:
@@ -1557,7 +1574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: e6f8542ab9d5542c5bd06cf4785485b6, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

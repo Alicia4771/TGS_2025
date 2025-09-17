@@ -400,7 +400,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 493354038}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 7bbc27fdaaa784f059f08e73afbd67e9, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 1184a5b6875084937a2c44e269bb7714, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 999883048}
@@ -414,14 +414,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 1
@@ -1645,6 +1643,8 @@ PlayableDirector:
     value: {fileID: 1410653268}
   - key: {fileID: -6088182046146933836, guid: b759600ba45494e09b112194a8ddadf4, type: 2}
     value: {fileID: 1206715504}
+  - key: {fileID: -5214684930924407914, guid: b759600ba45494e09b112194a8ddadf4, type: 2}
+    value: {fileID: 1617769288}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1669283391

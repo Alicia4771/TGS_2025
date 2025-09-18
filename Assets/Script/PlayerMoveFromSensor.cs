@@ -59,18 +59,15 @@
 //    private Vector3 jamp_start_pos;
 
 //    private float t;   // 時刻
-//    [SerializeField, Tooltip("ジャンプする時の角度[度]")]
-//    private int angle_degree;   // なす角[°]
-//    private double angle_rad;   // なす角[rad]
-//    private float cos;
-//    private float sin;
-//    private float v0;   // 初速度（溜めた量）
+//    private float v_y;
+//    private float v_z;
+
 //    private float a;    // 加速度（溜め開放後に伸ばした量）
 //    private const float g = (float)9.8;   // 重力加速度
 
-//    [SerializeField, Tooltip("初速度調整用の値")]
+//    [SerializeField, Tooltip("溜めた量にかける値")]
 //    private float v0_adjustment;
-//    [SerializeField, Tooltip("加速度調整用の値")]
+//    [SerializeField, Tooltip("伸ばした量にかける値")]
 //    private float a_adjustment;
 
 //    [SerializeField, Tooltip("チャージカウントの最大値")]
@@ -88,7 +85,7 @@
 
 
 //    // パーティクルシステムへの参照
-//    public ParticleSystem windParticles;
+//    //public ParticleSystem windParticles;
 
 //    // 風の効果音
 //    public AudioSource windAudioSource; // AudioSourceコンポーネントへの参照
@@ -106,15 +103,17 @@
 //    private void Awake()
 //    {
 //        rb = GetComponent<Rigidbody>();
+//        // 物理演算による回転を固定
+//        rb.freezeRotation = true;
 //    }
 
 //    void Start()
 //    {
 //        // ゲーム開始時にパーティクルを停止
-//        if (windParticles != null)
-//        {
-//            windParticles.Stop();
-//        }
+//        //if (windParticles != null)
+//        //{
+//        //    windParticles.Stop();
+//        //}
 //        distance_value_history = new float[DISTANCE_VALUE_HOW];
 //        for (int i = 0; i < DISTANCE_VALUE_HOW; i++) distance_value_history[i] = -1;
 
@@ -132,6 +131,8 @@
 
 //        is_distance_array_full = false;
 //        start_distance = 0;
+//        if (!start_line_distance_isSet) start_line_distance = 0;
+
 
 //        situation = 0;
 //        situation_before = 0;
@@ -189,16 +190,18 @@
 //                //UnityEngine.Debug.Log("ジャンプフラグON");
 //                t += (float)Time.deltaTime;
 
-//                float x = (v0 * cos) * t;
-//                float y = ((v0 * sin) * t) - (g * (t * t) / 2);
+//                //float x = (v0 * cos) * t;
+//                // float y = ((v0 * sin) * t) - (g * (t * t) / 2);
+//                float z = v_z * t;
+//                float y = (v_y * t) - (g * (t * t) / 2);
 
 
-//                Vector3 new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y + y, jamp_start_pos.z + x);
+//                Vector3 new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y + y, jamp_start_pos.z + z);
 
 //                // ジャンプ前の高さに戻ってきたらジャンプ終了
 //                if (jamp_start_pos.y + y < jamp_start_pos.y)
 //                {
-//                    new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y, jamp_start_pos.z + x);
+//                    new_pos = new Vector3(jamp_start_pos.x, jamp_start_pos.y, jamp_start_pos.z + z);
 //                    jamp_flag = false;
 //                }
 
@@ -238,7 +241,7 @@
 //                    //UnityEngine.Debug.Log("ため開始");
 //                    //UnityEngine.Debug.Log("charge_count: " + charge_count);
 //                    // 停止しているとき、停止
-//                    windParticles.Stop();
+//                    //windParticles.Stop();
 //                }
 //                else
 //                {
@@ -248,7 +251,7 @@
 //                    if (Math.Abs(inclination_value) < immovable_th)
 //                    {
 //                        // 停止しているとき、停止
-//                        windParticles.Stop();
+//                        //windParticles.Stop();
 //                        // 動いていない
 //                        situation = 0;
 //                        move_flag = false;
@@ -271,7 +274,7 @@
 //                        else
 //                        {
 //                            // 停止しているとき、停止
-//                            windParticles.Stop();
+//                            //windParticles.Stop();
 //                            // 戻っている
 //                            situation = -1;
 //                            move_flag = false;
@@ -314,7 +317,7 @@
 //        if (move_flag)
 //        {
 //            // 動いているとき、再生
-//            windParticles.Play();
+//            //windParticles.Play();
 //            if (windAudioSource != null && windSoundEffect != null && !windAudioSource.isPlaying)
 //            {
 //                windAudioSource.PlayOneShot(windSoundEffect);
@@ -372,16 +375,14 @@
 //    {
 //        tutorialJamp();
 //        // 動いているとき、再生
-//        windParticles.Play();
+//        //windParticles.Play();
 //        jamp_flag = true;
 
 
 //        t = 0;
-//        angle_rad = angle_degree * Math.PI / 180.0;
-//        cos = (float)Math.Cos(angle_rad);
-//        sin = (float)Math.Sin(angle_rad);
-//        v0 = (charge_count * v0_adjustment) + ((start_distance - distance_value) * a_adjustment);
-//        a = (start_distance - distance_value) * a_adjustment;
+//        v_y = charge_count * v0_adjustment;
+//        //v_z = (start_distance - distance_value) * a_adjustment;
+//        v_z = Math.Abs(start_distance - distance_value) * a_adjustment;
 
 //        jamp_start_pos = this.transform.position;
 
@@ -426,6 +427,20 @@
 //        Jumped = true;
 //    }
 //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -517,6 +532,33 @@ public class PlayerMoveFromSensor : MonoBehaviour
     [SerializeField, Tooltip("チャージカウントの最大値")]
     private int charge_count_max;
 
+    [SerializeField, Tooltip("ジャンプ_弱のライン")]
+    private int jump_line_1_distance;
+    [SerializeField, Tooltip("ジャンプ_中のライン")]
+    private int jump_line_2_distance;
+    [SerializeField, Tooltip("ジャンプ_強のライン")]
+    private int jump_line_3_distance;
+
+    [SerializeField, Tooltip("ジャンプ_弱以下の時の水平方向への速度")]
+    private float jump_0_strength;
+    [SerializeField, Tooltip("ジャンプ_弱の時の水平方向への速度")]
+    private float jump_1_strength;
+    [SerializeField, Tooltip("ジャンプ_中の時の水平方向への速度")]
+    private float jump_2_strength;
+    [SerializeField, Tooltip("ジャンプ_強の時の水平方向への速度")]
+    private float jump_3_strength;
+
+    [SerializeField, Tooltip("操作するカメラ")]
+    private Camera mainCamera;
+    [SerializeField, Tooltip("拡大・縮小するスピード")]
+    private float zoomSpeed = 10f;
+
+    [SerializeField, Tooltip("ズームするときの一番大きく時")]
+    private float zoom_min;
+    private float zoom_max;
+
+
+
     [SerializeField, Tooltip("キャラの最大速度")]
     private float maxSpeed = 5f; // ← インスペクタから調整可能にする
 
@@ -577,7 +619,6 @@ public class PlayerMoveFromSensor : MonoBehaviour
         start_distance = 0;
         if (!start_line_distance_isSet) start_line_distance = 0;
 
-
         situation = 0;
         situation_before = 0;
 
@@ -593,6 +634,9 @@ public class PlayerMoveFromSensor : MonoBehaviour
             chargeSlider.maxValue = charge_count_max;
             chargeSlider.value = 0;
         }
+
+        // カメラの最初のサイズをセット
+        zoom_max = mainCamera.fieldOfView;
 
         Charged = false;
         Jumped = false;
@@ -634,7 +678,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                 //UnityEngine.Debug.Log("ジャンプフラグON");
                 t += (float)Time.deltaTime;
 
-                //float x = (v0 * cos) * t;
+                // float x = (v0 * cos) * t;
                 // float y = ((v0 * sin) * t) - (g * (t * t) / 2);
                 float z = v_z * t;
                 float y = (v_y * t) - (g * (t * t) / 2);
@@ -714,6 +758,10 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
                                 //move();
                             }
+
+                            // カメラを縮小(もとに戻す)
+                            mainCamera.fieldOfView += zoomSpeed * Time.deltaTime;
+                            mainCamera.fieldOfView = Mathf.Clamp(mainCamera.fieldOfView, zoom_min, zoom_max);
                         }
                         else
                         {
@@ -722,6 +770,10 @@ public class PlayerMoveFromSensor : MonoBehaviour
                             // 戻っている
                             situation = -1;
                             move_flag = false;
+
+                            // カメラを拡大
+                            mainCamera.fieldOfView -= zoomSpeed * Time.deltaTime;
+                            mainCamera.fieldOfView = Mathf.Clamp(mainCamera.fieldOfView, zoom_min, zoom_max);
                         }
                     }
 
@@ -825,8 +877,26 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
         t = 0;
         v_y = charge_count * v0_adjustment;
-        //v_z = (start_distance - distance_value) * a_adjustment;
-        v_z = Math.Abs(start_distance - distance_value) * a_adjustment;
+
+        // ジャンプでの水平ほ方向への移動
+        if (distance_value < jump_line_3_distance)
+        {
+            v_z = jump_3_strength * a_adjustment;
+        }
+        else if (distance_value < jump_line_2_distance)
+        {
+            v_z = jump_2_strength * a_adjustment;
+        }
+        else if (distance_value < jump_line_1_distance)
+        {
+            v_z = jump_1_strength * a_adjustment;
+        }
+        else
+        {
+            v_z = jump_0_strength * a_adjustment;
+        }
+
+        // v_z = Math.Abs(start_distance - distance_value) * a_adjustment;
 
         jamp_start_pos = this.transform.position;
 

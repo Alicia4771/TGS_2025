@@ -122,6 +122,8 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
 
 /// <summary>
 /// 腹筋ローラーの動きから難易度を決定し、シーンを切り替える
@@ -144,6 +146,10 @@ public class DifficultySelector : MonoBehaviour
     public string easyScene = "EasyScene";
     public string normalScene = "NormalScene";
 
+    [SerializeField] private Image normalImage;
+    [SerializeField] private Image easyImage;
+    [SerializeField] private float showTime = 1.5f; // 画像を表示する秒数
+
     private enum State { Initializing, ReadyCheck, Waiting, Down }
     private State currentState = State.Initializing;
 
@@ -159,12 +165,23 @@ public class DifficultySelector : MonoBehaviour
     private bool normalFlag = false;
     private bool easyFlag = false;
 
+    private bool isLoading = false;
+
     void Start()
     {
         startTime = Time.time;
         history = new float[sampleCount];
         for (int i = 0; i < sampleCount; i++) history[i] = baseDistance;
     }
+
+    private IEnumerator ShowAndLoad(Image target, string sceneName)
+    {
+        isLoading = true;
+        target.enabled = true;                  // 画像を表示
+        yield return new WaitForSeconds(showTime);
+        SceneManager.LoadScene(sceneName);      // シーン切替
+    }
+
 
     void Update()
     {
@@ -180,6 +197,9 @@ public class DifficultySelector : MonoBehaviour
         for (int i = 0; i < valid; i++) sum += history[i];
         float avg = sum / valid;
         float diff = avg - baseDistance;
+
+
+
 
         switch (currentState)
         {
@@ -220,6 +240,34 @@ public class DifficultySelector : MonoBehaviour
                 }
                 break;
 
+            //case State.Down:
+            //    // 戻り動作のしきい値をチェック
+            //    if (diff < normalUpOffset)
+            //    {
+            //        normalFlag = true; // 普通モード優先
+            //    }
+            //    else if (diff > easyUpOffset)
+            //    {
+            //        easyFlag = true;
+            //    }
+
+            //    // 「上がってきた」状態になったらシーン切替
+            //    if (diff < easyUpOffset)
+            //    {
+            //        if (normalFlag)
+            //        {
+            //            Debug.Log("普通モードに決定");
+            //            SceneManager.LoadScene(normalScene);
+            //        }
+            //        else if (easyFlag)
+            //        {
+            //            Debug.Log("簡単モードに決定");
+            //            SceneManager.LoadScene(easyScene);
+            //        }
+            //    }
+            //    break;
+
+
             case State.Down:
                 // 戻り動作のしきい値をチェック
                 if (diff < normalUpOffset)
@@ -232,20 +280,19 @@ public class DifficultySelector : MonoBehaviour
                 }
 
                 // 「上がってきた」状態になったらシーン切替
-                if (diff < easyUpOffset)
+                if (!isLoading && diff < easyUpOffset)
                 {
                     if (normalFlag)
                     {
-                        Debug.Log("普通モードに決定");
-                        SceneManager.LoadScene(normalScene);
+                        StartCoroutine(ShowAndLoad(normalImage, normalScene));
                     }
                     else if (easyFlag)
                     {
-                        Debug.Log("簡単モードに決定");
-                        SceneManager.LoadScene(easyScene);
+                        StartCoroutine(ShowAndLoad(easyImage, easyScene));
                     }
                 }
                 break;
+
         }
     }
 }

@@ -148,6 +148,7 @@ public class DifficultySelector : MonoBehaviour
 
     [SerializeField] private Image normalImage;
     [SerializeField] private Image easyImage;
+    [SerializeField] private Image DifficultyImage;
     [SerializeField] private float showTime = 1.5f; // 画像を表示する秒数
 
     private enum State { Initializing, ReadyCheck, Waiting, Down }
@@ -172,14 +173,25 @@ public class DifficultySelector : MonoBehaviour
         startTime = Time.time;
         history = new float[sampleCount];
         for (int i = 0; i < sampleCount; i++) history[i] = baseDistance;
+        // 画像を最初は非表示にしておく
+        if (normalImage != null) normalImage.enabled = false;
+        if (easyImage != null) easyImage.enabled = false;
     }
 
     private IEnumerator ShowAndLoad(Image target, string sceneName)
     {
         isLoading = true;
-        target.enabled = true;                  // 画像を表示
+
+        // まず両方OFFにしてから
+        if (normalImage != null) normalImage.enabled = false;
+        if (easyImage != null) easyImage.enabled = false;
+
+        if (DifficultyImage != null) DifficultyImage.enabled = false;
+        // 選ばれた方だけON
+        target.enabled = true;
+
         yield return new WaitForSeconds(showTime);
-        SceneManager.LoadScene(sceneName);      // シーン切替
+        SceneManager.LoadScene(sceneName);
     }
 
 

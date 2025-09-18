@@ -12,9 +12,12 @@ public class CountdownUI : MonoBehaviour
     [SerializeField] private AudioSource bgmSource; // 再生用AudioSource
     [SerializeField] private AudioClip bgmClip;     // 再生したいBGM
 
+    public static bool countdown_flag;
+
     void Start()
     {
         StartCountdown();
+        countdown_flag = true;
     }
 
     public void StartCountdown()
@@ -35,6 +38,7 @@ public class CountdownUI : MonoBehaviour
 
         // カウントダウン終了
         countdownImage.enabled = false;
+        countdown_flag = false;
 
         // 🎵 BGM再生
         if (bgmSource != null && bgmClip != null)

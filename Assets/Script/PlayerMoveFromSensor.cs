@@ -73,6 +73,33 @@
 //    [SerializeField, Tooltip("チャージカウントの最大値")]
 //    private int charge_count_max;
 
+//    [SerializeField, Tooltip("ジャンプ_弱のライン")]
+//    private int jump_line_1_distance;
+//    [SerializeField, Tooltip("ジャンプ_中のライン")]
+//    private int jump_line_2_distance;
+//    [SerializeField, Tooltip("ジャンプ_強のライン")]
+//    private int jump_line_3_distance;
+
+//    [SerializeField, Tooltip("ジャンプ_弱以下の時の水平方向への速度")]
+//    private float jump_0_strength;
+//    [SerializeField, Tooltip("ジャンプ_弱の時の水平方向への速度")]
+//    private float jump_1_strength;
+//    [SerializeField, Tooltip("ジャンプ_中の時の水平方向への速度")]
+//    private float jump_2_strength;
+//    [SerializeField, Tooltip("ジャンプ_強の時の水平方向への速度")]
+//    private float jump_3_strength;
+
+//    [SerializeField, Tooltip("操作するカメラ")]
+//    private Camera mainCamera;
+//    [SerializeField, Tooltip("拡大・縮小するスピード")]
+//    private float zoomSpeed = 10f;
+
+//    [SerializeField, Tooltip("ズームするときの一番大きく時")]
+//    private float zoom_min;
+//    private float zoom_max;
+
+
+
 //    [SerializeField, Tooltip("キャラの最大速度")]
 //    private float maxSpeed = 5f; // ← インスペクタから調整可能にする
 
@@ -133,7 +160,6 @@
 //        start_distance = 0;
 //        if (!start_line_distance_isSet) start_line_distance = 0;
 
-
 //        situation = 0;
 //        situation_before = 0;
 
@@ -149,6 +175,9 @@
 //            chargeSlider.maxValue = charge_count_max;
 //            chargeSlider.value = 0;
 //        }
+
+//        // カメラの最初のサイズをセット
+//        zoom_max = mainCamera.fieldOfView;
 
 //        Charged = false;
 //        Jumped = false;
@@ -190,7 +219,7 @@
 //                //UnityEngine.Debug.Log("ジャンプフラグON");
 //                t += (float)Time.deltaTime;
 
-//                //float x = (v0 * cos) * t;
+//                // float x = (v0 * cos) * t;
 //                // float y = ((v0 * sin) * t) - (g * (t * t) / 2);
 //                float z = v_z * t;
 //                float y = (v_y * t) - (g * (t * t) / 2);
@@ -270,6 +299,10 @@
 
 //                                //move();
 //                            }
+
+//                            // カメラを縮小(もとに戻す)
+//                            mainCamera.fieldOfView += zoomSpeed * Time.deltaTime;
+//                            mainCamera.fieldOfView = Mathf.Clamp(mainCamera.fieldOfView, zoom_min, zoom_max);
 //                        }
 //                        else
 //                        {
@@ -278,6 +311,10 @@
 //                            // 戻っている
 //                            situation = -1;
 //                            move_flag = false;
+
+//                            // カメラを拡大
+//                            mainCamera.fieldOfView -= zoomSpeed * Time.deltaTime;
+//                            mainCamera.fieldOfView = Mathf.Clamp(mainCamera.fieldOfView, zoom_min, zoom_max);
 //                        }
 //                    }
 
@@ -381,8 +418,26 @@
 
 //        t = 0;
 //        v_y = charge_count * v0_adjustment;
-//        //v_z = (start_distance - distance_value) * a_adjustment;
-//        v_z = Math.Abs(start_distance - distance_value) * a_adjustment;
+
+//        // ジャンプでの水平ほ方向への移動
+//        if (distance_value < jump_line_3_distance)
+//        {
+//            v_z = jump_3_strength * a_adjustment;
+//        }
+//        else if (distance_value < jump_line_2_distance)
+//        {
+//            v_z = jump_2_strength * a_adjustment;
+//        }
+//        else if (distance_value < jump_line_1_distance)
+//        {
+//            v_z = jump_1_strength * a_adjustment;
+//        }
+//        else
+//        {
+//            v_z = jump_0_strength * a_adjustment;
+//        }
+
+//        // v_z = Math.Abs(start_distance - distance_value) * a_adjustment;
 
 //        jamp_start_pos = this.transform.position;
 
@@ -447,16 +502,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 using UnityEngine;
 using System;
 using System.Diagnostics;
@@ -466,6 +511,7 @@ using UnityEngine.UI; // ← 追加
 public class PlayerMoveFromSensor : MonoBehaviour
 {
     Rigidbody rb;
+
     [SerializeField, Tooltip("加える力")]
     private float force = 10f;
 
@@ -671,7 +717,7 @@ public class PlayerMoveFromSensor : MonoBehaviour
                 }
             }
         }
-        else
+        else if (!CountdownUI.countdown_flag)
         {
             if (jamp_flag)  // ジャンプ中
             {
@@ -810,31 +856,34 @@ public class PlayerMoveFromSensor : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (move_flag)
+        if (!CountdownUI.countdown_flag)
         {
-            // 動いているとき、再生
-            //windParticles.Play();
-            if (windAudioSource != null && windSoundEffect != null && !windAudioSource.isPlaying)
+            if (move_flag)
             {
-                windAudioSource.PlayOneShot(windSoundEffect);
+                // 動いているとき、再生
+                //windParticles.Play();
+                if (windAudioSource != null && windSoundEffect != null && !windAudioSource.isPlaying)
+                {
+                    windAudioSource.PlayOneShot(windSoundEffect);
+                }
+                //UnityEngine.Debug.Log("風吹く");
+                Vector3 dir = transform.forward; // ← 常にキャラの向きで進む
+                rb.AddForce(dir * force * move_diameter * collision_diameter, mode);
+                //UnityEngine.Debug.Log("進む");
             }
-            //UnityEngine.Debug.Log("風吹く");
-            Vector3 dir = transform.forward; // ← 常にキャラの向きで進む
-            rb.AddForce(dir * force * move_diameter * collision_diameter, mode);
-            //UnityEngine.Debug.Log("進む");
-        }
-        else
-        {
-            var v = rb.linearVelocity;   // ← linearVelocity じゃなく velocity
-            // 例: Z軸だけ素早く減衰（Yは重力を維持）
-            v.z = Mathf.MoveTowards(v.z, 0f, brake * Time.fixedDeltaTime);
-            rb.linearVelocity = v;
-        }
+            else
+            {
+                var v = rb.linearVelocity;   // ← linearVelocity じゃなく velocity
+                // 例: Z軸だけ素早く減衰（Yは重力を維持）
+                v.z = Mathf.MoveTowards(v.z, 0f, brake * Time.fixedDeltaTime);
+                rb.linearVelocity = v;
+            }
 
-        // ★ ここで速度制限
-        if (rb.linearVelocity.magnitude > maxSpeed)
-        {
-            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+            // ★ ここで速度制限
+            if (rb.linearVelocity.magnitude > maxSpeed)
+            {
+                rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+            }
         }
     }
 

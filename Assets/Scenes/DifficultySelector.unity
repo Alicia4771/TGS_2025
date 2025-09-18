@@ -1115,15 +1115,16 @@ MonoBehaviour:
   downOffset: -20
   easyUpOffset: -20
   normalUpOffset: -40
-  startupDelay: 2
-  readyTolerance: 5
-  readyHoldTime: 1
+  startupDelay: 1
+  readyTolerance: 10
+  readyHoldTime: 0.3
   sampleCount: 35
   easyScene: game
   normalScene: nomal
   normalImage: {fileID: 1561156080}
   easyImage: {fileID: 2110470354}
-  showTime: 1.5
+  DifficultyImage: {fileID: 1918027185}
+  showTime: 3
 --- !u!4 &2037332934
 Transform:
   m_ObjectHideFlags: 0

@@ -2222,6 +2222,16 @@ MonoBehaviour:
   v0_adjustment: 0.027
   a_adjustment: 0.5
   charge_count_max: 300
+  jump_line_1_distance: 49
+  jump_line_2_distance: 30
+  jump_line_3_distance: 20
+  jump_0_strength: 1
+  jump_1_strength: 5
+  jump_2_strength: 10
+  jump_3_strength: 20
+  mainCamera: {fileID: 108976069}
+  zoomSpeed: 10
+  zoom_min: 10
   maxSpeed: 5
   chargeSlider: {fileID: 1851499060}
   windAudioSource: {fileID: 766005480}

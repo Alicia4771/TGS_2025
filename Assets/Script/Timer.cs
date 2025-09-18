@@ -142,48 +142,51 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        if (isTimerRunning)
+        if (!CountdownUI.countdown_flag)
         {
-            currentTime -= Time.deltaTime;
-            elapsedTime += Time.deltaTime; // 経過時間を正確に計測
-
-            if (currentTime <= 0)
+            if (isTimerRunning)
             {
-                currentTime = 0;
-                isTimerRunning = false;
-                hasTimeExpired = true;
-                // 時間切れになったことを示すフラグを立てる
-            }
+                currentTime -= Time.deltaTime;
+                elapsedTime += Time.deltaTime; // 経過時間を正確に計測
 
-            TimerText.text = currentTime.ToString("F0");
-        }
-
-        // ゴールまたは時間切れ後のシーン切り替え処理
-        if (hasReachedGoal)
-        {
-            // 効果音が鳴り終わった後にシーン切り替え
-            if (goalAudioSource != null && !goalAudioSource.isPlaying)
-            {
-                LoadResultScene();
-            }
-        }
-        else if (hasTimeExpired)
-        {
-            if(!hasTimeExpiredAudioFlug)
-            {
-                // ゴール時の効果音を再生
-                if (goalAudioSource != null && goalSoundEffect != null)
+                if (currentTime <= 0)
                 {
-                    goalAudioSource.PlayOneShot(goalSoundEffect);
-                    hasTimeExpiredAudioFlug = true;
+                    currentTime = 0;
+                    isTimerRunning = false;
+                    hasTimeExpired = true;
+                    // 時間切れになったことを示すフラグを立てる
+                }
+
+                TimerText.text = currentTime.ToString("F0");
+            }
+
+            // ゴールまたは時間切れ後のシーン切り替え処理
+            if (hasReachedGoal)
+            {
+                // 効果音が鳴り終わった後にシーン切り替え
+                if (goalAudioSource != null && !goalAudioSource.isPlaying)
+                {
+                    LoadResultScene();
                 }
             }
-
-
-            // 効果音が鳴り終わった後にシーン切り替え
-            if (goalAudioSource != null && !goalAudioSource.isPlaying && hasTimeExpiredAudioFlug)
+            else if (hasTimeExpired)
             {
-                LoadResultScene();
+                if (!hasTimeExpiredAudioFlug)
+                {
+                    // ゴール時の効果音を再生
+                    if (goalAudioSource != null && goalSoundEffect != null)
+                    {
+                        goalAudioSource.PlayOneShot(goalSoundEffect);
+                        hasTimeExpiredAudioFlug = true;
+                    }
+                }
+
+
+                // 効果音が鳴り終わった後にシーン切り替え
+                if (goalAudioSource != null && !goalAudioSource.isPlaying && hasTimeExpiredAudioFlug)
+                {
+                    LoadResultScene();
+                }
             }
         }
     }

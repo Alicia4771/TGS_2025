@@ -2104,7 +2104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a456a20ca4f4dd0a631921f695c4a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 200
+  force: 400
   brake: 25
   move_distance: 0.5
   immovable_th: 0.5
@@ -2113,16 +2113,16 @@ MonoBehaviour:
   v0_adjustment: 0.027
   a_adjustment: 0.5
   charge_count_max: 300
-  jump_line_1_distance: 49
-  jump_line_2_distance: 30
-  jump_line_3_distance: 20
-  jump_0_strength: 1
-  jump_1_strength: 5
-  jump_2_strength: 10
-  jump_3_strength: 20
+  jump_line_1_distance: 53
+  jump_line_2_distance: 36
+  jump_line_3_distance: 24
+  jump_0_strength: 10
+  jump_1_strength: 15
+  jump_2_strength: 20
+  jump_3_strength: 30
   mainCamera: {fileID: 108976069}
-  zoomSpeed: 10
-  zoom_min: 10
+  zoomSpeed: 30
+  zoom_min: 50
   maxSpeed: 5
   chargeSlider: {fileID: 1851499060}
   windAudioSource: {fileID: 766005480}
@@ -3880,7 +3880,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819916106}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 8ea027499e79f4d0bbc6745786d7f451, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: d0e801370e55245d5ab47e78b9360e0b, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -3894,12 +3894,14 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 1

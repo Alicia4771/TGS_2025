@@ -133,11 +133,14 @@ public class DifficultySelector : MonoBehaviour
     [Header("センサー設定")]
     public float baseDistance = 60f;
     public float downOffset = -20f;      // 基準より下がったらDown
-    public float easyUpOffset = 10f;     // 簡単モードの戻り閾値
-    public float normalUpOffset = 40f;   // 普通モードの戻り閾値
+    public float easyUpOffset = -15f;     // 簡単モードの戻り閾値
+    public float normalUpOffset = -40f;   // 普通モードの戻り閾値
     public float startupDelay = 2f;      // センサー起動後の待機時間
     public float readyTolerance = 5f;    // 基準付近とみなす許容値
     public float readyHoldTime = 1f;     // その位置を何秒キープしたらOKか
+
+    [SerializeField, Tooltip("緑の線との差")]
+    private float greenUpOffset = -5f;
 
     [Header("ノイズ対策")]
     public int sampleCount = 20;
@@ -176,6 +179,9 @@ public class DifficultySelector : MonoBehaviour
         // 画像を最初は非表示にしておく
         if (normalImage != null) normalImage.enabled = false;
         if (easyImage != null) easyImage.enabled = false;
+
+        normalFlag = false;
+        easyFlag = false;
     }
 
     private IEnumerator ShowAndLoad(Image target, string sceneName)
@@ -285,14 +291,15 @@ public class DifficultySelector : MonoBehaviour
                 if (diff < normalUpOffset)
                 {
                     normalFlag = true; // 普通モード優先
+                    easyFlag = false;
                 }
-                else if (diff > easyUpOffset)
+                else if (diff < easyUpOffset)
                 {
                     easyFlag = true;
                 }
 
                 // 「上がってきた」状態になったらシーン切替
-                if (!isLoading && diff < easyUpOffset)
+                if (!isLoading && diff > greenUpOffset)
                 {
                     if (normalFlag)
                     {

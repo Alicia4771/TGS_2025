@@ -1112,15 +1112,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDistance: 55
-  downOffset: -20
-  easyUpOffset: -20
+  downOffset: -15
+  easyUpOffset: -15
   normalUpOffset: -40
   startupDelay: 1
   readyTolerance: 10
-  readyHoldTime: 0.3
-  sampleCount: 35
-  easyScene: game
-  normalScene: nomal
+  readyHoldTime: 1
+  greenUpOffset: -5
+  sampleCount: 50
+  easyScene: easyCamera
+  normalScene: camera
   normalImage: {fileID: 1561156080}
   easyImage: {fileID: 2110470354}
   DifficultyImage: {fileID: 1918027185}

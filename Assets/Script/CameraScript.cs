@@ -9,11 +9,6 @@ public class CameraScript : MonoBehaviour
         parentTransform = transform.parent;
 
         this.transform.position = parentTransform.position;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        this.transform.rotation = transform.parent.rotation;
     }
 }
